@@ -192,9 +192,17 @@ class App extends React.Component<any, any> {
     this.state = {
       ...INITIAL_STATE
     };
+
+    // Do we demostrate inline or modal functionality
+    // This would be better off as a separate example app,
+    // but the current App structure and react-app-ts
+    // made it tricky to support multiple entry points
+    const renderStyle = window.location.search.includes("inline") ? "inline" : "modal";
+
     this.web3Modal = new Web3Modal({
       network: this.getNetwork(),
       cacheProvider: true,
+      renderStyle,
       providerOptions
     });
   }
@@ -603,6 +611,9 @@ class App extends React.Component<any, any> {
               <SLanding center>
                 <h3>{`Test Web3Modal`}</h3>
                 <ConnectButton onClick={this.onConnect} />
+
+                {this.web3Modal.renderStyle === "inline" && this.web3Modal.renderInline()}
+
               </SLanding>
             )}
           </SContent>

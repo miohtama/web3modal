@@ -1,6 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import Modal from "../components/Modal";
+import InlineSelector from "../components/InlineSelector";
 import { ICoreOptions, IProviderCallback } from "../helpers/types";
 
 import EventController from "./controllers/events";
@@ -18,7 +19,8 @@ const defaultOpts = {
   lightboxOpacity: 0.4,
   cacheProvider: false,
   providerOptions: {},
-  network: ""
+  network: "",
+  renderStyle: "modal",
 };
 
 class Core {
@@ -28,13 +30,20 @@ class Core {
   private providerController: ProviderController;
   private providers: IProviderCallback[];
 
+  // "modal" by default
+  public readonly renderStyle: string;
+
   constructor(opts?: Partial<ICoreOptions>) {
+
+    console.log(opts);
     const options: ICoreOptions = {
       ...defaultOpts,
       ...opts
     };
 
     this.lightboxOpacity = options.lightboxOpacity;
+
+    this.renderStyle = options.renderStyle;
 
     this.providerController = new ProviderController({
       cacheProvider: options.cacheProvider,
@@ -48,7 +57,16 @@ class Core {
     this.providerController.on(ERROR_EVENT, error => this.onError(error));
 
     this.providers = this.providerController.getProviders();
-    this.renderModal();
+
+    if(this.renderStyle == "inline") {
+      // Do nothing...
+      // The user must manually call web3modal.renderInline() and drop the result in
+      // their template
+    } else if(this.renderStyle == "modal") {
+      this.renderModal();
+    } else {
+      throw new Error(`Invalid renderStyle ${this.renderStyle}`);
+    }
   }
 
   get cachedProvider(): string {
@@ -137,6 +155,20 @@ class Core {
     );
   }
 
+  /**
+   * Renders the InlineSelector using JSX.
+   *
+   * The caller must be a React JSX context.
+   */
+  public renderInline() {
+    return (
+      <InlineSelector
+        providers={this.providers}
+        resetState={this.resetState}
+        onClose={this.onClose}
+      />
+    );
+  }
   // --------------- PRIVATE METHODS --------------- //
 
   private _toggleModal = async () => {

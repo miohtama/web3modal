@@ -1,5 +1,10 @@
 export interface ICoreOptions extends IProviderControllerOptions {
   lightboxOpacity: number;
+
+  // Do we render a modal dialog or the choice element inline on the page.
+  // Can be "modal" or "inline"
+  // Default is "modal"
+  renderStyle: string;
 }
 
 export interface IProviderControllerOptions {

@@ -18,6 +18,7 @@ declare global {
     Box: any;
     box: any;
     space: any;
+    exampleOptions: any;
   }
 }
 

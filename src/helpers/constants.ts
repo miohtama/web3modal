@@ -23,3 +23,5 @@ export const PROVIDER_NAME_CLASSNAME = "web3modal-provider-name";
 export const PROVIDER_DESCRIPTION_CLASSNAME = "web3modal-provider-description";
 
 export const CONNECT_BUTTON_CLASSNAME = "web3modal-connect-button";
+
+export const INLINE_SELECTOR_CLASSNAME = "web3modal-inline-selector";
